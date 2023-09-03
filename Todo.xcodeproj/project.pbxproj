@@ -11,6 +11,7 @@
 		8F3B2AA12AA4DC350039E5A1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3B2AA02AA4DC350039E5A1 /* ContentView.swift */; };
 		8F3B2AA32AA4DC360039E5A1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F3B2AA22AA4DC360039E5A1 /* Assets.xcassets */; };
 		8F3B2AA62AA4DC360039E5A1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F3B2AA52AA4DC360039E5A1 /* Preview Assets.xcassets */; };
+		8F3B2AAE2AA4DC560039E5A1 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 8F3B2AAD2AA4DC560039E5A1 /* GRDB */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F3B2AAE2AA4DC560039E5A1 /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +85,9 @@
 			dependencies = (
 			);
 			name = Todo;
+			packageProductDependencies = (
+				8F3B2AAD2AA4DC560039E5A1 /* GRDB */,
+			);
 			productName = Todo;
 			productReference = 8F3B2A9B2AA4DC350039E5A1 /* Todo.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +116,9 @@
 				Base,
 			);
 			mainGroup = 8F3B2A922AA4DC350039E5A1;
+			packageReferences = (
+				8F3B2AAC2AA4DC560039E5A1 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+			);
 			productRefGroup = 8F3B2A9C2AA4DC350039E5A1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -337,6 +345,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8F3B2AAC2AA4DC560039E5A1 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8F3B2AAD2AA4DC560039E5A1 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8F3B2AAC2AA4DC560039E5A1 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			productName = GRDB;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8F3B2A932AA4DC350039E5A1 /* Project object */;
 }
