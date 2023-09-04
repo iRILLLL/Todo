@@ -7,6 +7,8 @@ struct TodoListView: View {
     @State private var todos: [Todo] = []
     @State private var errorMessage: String?
     
+    let menu: Menu
+    
     var body: some View {
         NavigationView {
             if let errorMessage {
@@ -41,6 +43,6 @@ struct TodoListView: View {
 
 struct TodoListView_Previews: PreviewProvider {
     static var previews: some View {
-        TodoListView()
+        TodoListView(menu: [Menu].menus[0])
     }
 }

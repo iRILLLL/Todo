@@ -1,6 +1,6 @@
 import Foundation
 
-struct Menu: Identifiable {
+struct Menu: Identifiable, Hashable {
     let id: UUID
     let icon: String
     let text: String
