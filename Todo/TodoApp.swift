@@ -1,17 +1,14 @@
-//
-//  TodoApp.swift
-//  Todo
-//
-//  Created by iril on 03/09/23.
-//
-
 import SwiftUI
 
 @main
 struct TodoApp: App {
+    
+    @StateObject var database = try! AppDatabase()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MenuView()
+                .environmentObject(database)
         }
     }
 }
