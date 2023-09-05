@@ -28,11 +28,12 @@ private extension AppDatabase {
     
     private var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
-        
+        migrator.eraseDatabaseOnSchemaChange = true
         migrator.registerMigration("createTodo") { db in
             try db.create(table: "todo", body: { t in
                 t.autoIncrementedPrimaryKey("id")
                 t.column("name", .text).notNull()
+                t.column("completedAt", .datetime)
             })
         }
         
@@ -42,8 +43,15 @@ private extension AppDatabase {
     func createPlaceholders() throws {
         try writer.write { db in
             if try Todo.all().isEmpty(db) {
-                for i in 0 ..< 5 {
-                    _ = try Todo(name: "placeholder #\(i)").inserted(db)
+                for i in 0 ..< 10 {
+                    let random = Int.random(in: 0 ..< 1000)
+                    if i % 2 == 0 {
+                        let date = Date.now
+                        let randomDate = Int.random(in: 0 ..< 100000)
+                        _ = try Todo(name: "placeholder #\(random)", completedAt: date.addingTimeInterval(TimeInterval(randomDate))).inserted(db)
+                    } else {
+                        _ = try Todo(name: "placeholder #\(random)").inserted(db)
+                    }
                 }
             }
         }
@@ -52,9 +60,25 @@ private extension AppDatabase {
 
 extension AppDatabase {
     
-    func getTodos() throws -> [Todo] {
-        try writer.read{ db in
-            try Todo.all().fetchAll(db)
+    enum OrderBy {
+        case name
+        case completedDate
+    }
+    
+    func getUncompletedTodos() throws -> [Todo] {
+        try writer.read { db in
+            return try Todo.all().filterUncompletedTodos().fetchAll(db)
+        }
+    }
+    
+    func getTodos(orderBy: OrderBy) throws -> [Todo] {
+        try writer.read { db in
+            switch orderBy {
+            case .name:
+                return try Todo.all().orderedByName().fetchAll(db)
+            case .completedDate:
+                return try Todo.all().orderedByCompletedDate().fetchAll(db)
+            }
         }
     }
     
