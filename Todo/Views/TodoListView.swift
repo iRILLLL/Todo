@@ -10,20 +10,14 @@ struct TodoListView: View {
     let menu: Menu
     
     var body: some View {
-        NavigationView {
-            if let errorMessage {
-                Text(errorMessage)
-            } else {
-                List {
-                    ForEach(todos) { todo in
-                        Text(todo.name)
-                    }
-                    .onDelete { indexSet in
-                        let ids = indexSet.compactMap { todos[$0].id }
-                        Task {
-                            try? await database.deleteTodos(ids: ids)
-                        }
-                    }
+        List {
+            ForEach($todos) { todo in
+                TodoItemView(todo: todo)
+            }
+            .onDelete { indexSet in
+                let ids = indexSet.compactMap { todos[$0].id }
+                Task {
+                    try? await database.deleteTodos(ids: ids)
                 }
             }
         }
@@ -34,7 +28,7 @@ struct TodoListView: View {
     
     private func getTodos() {
         do {
-            todos = try database.getTodos()
+            todos = try database.getUncompletedTodos()
         } catch {
             errorMessage = error.localizedDescription
         }

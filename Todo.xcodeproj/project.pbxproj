@@ -17,6 +17,8 @@
 		8F3B2AB22AA4E04A0039E5A1 /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3B2AB12AA4E04A0039E5A1 /* Todo.swift */; };
 		8F3B2AB42AA4E2290039E5A1 /* TodoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3B2AB32AA4E2290039E5A1 /* TodoListView.swift */; };
 		8F3B2AB62AA4E2330039E5A1 /* TodoDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3B2AB52AA4E2330039E5A1 /* TodoDetailView.swift */; };
+		8F62E0F12AAEE77D0058673E /* CheckboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62E0F02AAEE77D0058673E /* CheckboxView.swift */; };
+		8FD285872AA787E100896C95 /* TodoItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD285862AA787E100896C95 /* TodoItemView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		8F3B2AB12AA4E04A0039E5A1 /* Todo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
 		8F3B2AB32AA4E2290039E5A1 /* TodoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListView.swift; sourceTree = "<group>"; };
 		8F3B2AB52AA4E2330039E5A1 /* TodoDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoDetailView.swift; sourceTree = "<group>"; };
+		8F62E0F02AAEE77D0058673E /* CheckboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxView.swift; sourceTree = "<group>"; };
+		8FD285862AA787E100896C95 /* TodoItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +63,8 @@
 				8F3B2AB32AA4E2290039E5A1 /* TodoListView.swift */,
 				8F39F4002AA63B930096F6ED /* MenuView.swift */,
 				8F3B2AB52AA4E2330039E5A1 /* TodoDetailView.swift */,
+				8FD285862AA787E100896C95 /* TodoItemView.swift */,
+				8F62E0F02AAEE77D0058673E /* CheckboxView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -176,11 +182,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F62E0F12AAEE77D0058673E /* CheckboxView.swift in Sources */,
 				8F3B2AB02AA4DC870039E5A1 /* AppDatabase.swift in Sources */,
 				8F39F4012AA63B930096F6ED /* MenuView.swift in Sources */,
 				8F3B2AB62AA4E2330039E5A1 /* TodoDetailView.swift in Sources */,
 				8F39F3FF2AA63B8D0096F6ED /* Menu.swift in Sources */,
 				8F3B2AB42AA4E2290039E5A1 /* TodoListView.swift in Sources */,
+				8FD285872AA787E100896C95 /* TodoItemView.swift in Sources */,
 				8F3B2A9F2AA4DC350039E5A1 /* TodoApp.swift in Sources */,
 				8F3B2AB22AA4E04A0039E5A1 /* Todo.swift in Sources */,
 			);

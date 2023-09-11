@@ -5,6 +5,11 @@ struct Todo: Identifiable, Hashable {
     var id: Int64?
     var name: String
     var completedAt: Date?
+    
+    var isCompleted: Bool {
+        get { completedAt != nil }
+        set { completedAt = newValue ? Date() : nil }
+    }
 }
 
 extension Todo: Codable, FetchableRecord, MutablePersistableRecord {
