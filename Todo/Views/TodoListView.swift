@@ -6,23 +6,52 @@ struct TodoListView: View {
     
     @State private var todos: [Todo] = []
     @State private var errorMessage: String?
+    @FocusState private var focusedTodo: Int64?
     
     let menu: Menu
     
     var body: some View {
-        List {
-            ForEach($todos) { todo in
-                TodoItemView(todo: todo)
-            }
-            .onDelete { indexSet in
-                let ids = indexSet.compactMap { todos[$0].id }
-                Task {
-                    try? await database.deleteTodos(ids: ids)
+        ZStack {
+            List {
+                ForEach($todos) { $todo in
+                    TodoItemView(todo: $todo)
+                        .focused($focusedTodo, equals: todo.id)
+                }
+                .onDelete { indexSet in
+                    let ids = indexSet.compactMap { todos[$0].id }
+                    Task {
+                        try? await database.deleteTodos(ids: ids)
+                    }
                 }
             }
-        }
-        .onAppear {
-            getTodos()
+            .scrollDismissesKeyboard(.immediately)
+            .listStyle(.plain)
+            .onAppear {
+                getTodos()
+            }
+            
+            Button(action: {
+                withAnimation {
+                    do {
+                        let todo = try database.createTodo(name: "")
+                        todos.insert(todo, at: 0)
+                        focusedTodo = todo.id
+                    } catch {
+                        errorMessage = error.localizedDescription
+                    }
+                }
+            }) {
+                Image(systemName: "plus")
+                    .font(.title)
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(
+                        Circle()
+                            .fill(Color.accentColor)
+                    )
+            }
+            .frame(maxHeight: .infinity, alignment: .bottom)
+            .padding(.bottom)
         }
     }
     

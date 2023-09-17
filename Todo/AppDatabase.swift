@@ -71,6 +71,12 @@ extension AppDatabase {
         }
     }
     
+    func createTodo(name: String) throws -> Todo {
+        try writer.write { db in
+            return try Todo(name: name).inserted(db)
+        }
+    }
+    
     func getTodos(orderBy: OrderBy) throws -> [Todo] {
         try writer.read { db in
             switch orderBy {
