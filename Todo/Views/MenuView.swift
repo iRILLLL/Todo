@@ -3,26 +3,22 @@ import SwiftUI
 struct MenuView: View {
     
     let menus: [Menu] = .menus
+    @Binding var selectedMenu: Menu?
     
     var body: some View {
-        NavigationView {
-            List {
-                Section {
-                    ForEach(menus, id: \.self) { menu in
-                        NavigationLink(destination: TodoListView(menu: menu)) {
-                            Label(menu.text, systemImage: menu.icon)
-                        }
+        List(selection: $selectedMenu) {
+            Section {
+                ForEach(menus, id: \.self) { menu in
+                    NavigationLink(value: menu) {
+                        Label(menu.text, systemImage: menu.icon)
                     }
                 }
+                .onMove { (source: IndexSet, dest: Int) in
+                    
+                }
             }
-            .navigationTitle("Home")
-            .navigationBarTitleDisplayMode(.inline)
         }
-    }
-}
-
-struct MenuView_Previews: PreviewProvider {
-    static var previews: some View {
-        MenuView()
+        .navigationTitle("Home")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }

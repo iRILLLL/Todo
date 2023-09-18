@@ -1,20 +1,14 @@
-//
-//  TodoDetailView.swift
-//  Todo
-//
-//  Created by iril on 03/09/23.
-//
-
 import SwiftUI
 
 struct TodoDetailView: View {
+    
+    let todo: Todo?
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
-
-struct TodoDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        TodoDetailView()
+        if let todo {
+            Text(todo.name)
+        } else {
+            Text("Select a todo")
+        }
     }
 }

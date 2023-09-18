@@ -6,66 +6,69 @@ struct TodoListView: View {
     
     @State private var todos: [Todo] = []
     @State private var errorMessage: String?
-    @FocusState private var focusedTodo: Int64?
     
-    let menu: Menu
+    @Binding var selectedTodo: Todo?
+    let menu: Menu?
     
     var body: some View {
-        ZStack {
-            List {
-                ForEach($todos) { $todo in
-                    TodoItemView(todo: $todo)
-                        .focused($focusedTodo, equals: todo.id)
-                }
-                .onDelete { indexSet in
-                    let ids = indexSet.compactMap { todos[$0].id }
-                    Task {
-                        try? await database.deleteTodos(ids: ids)
+        if menu != nil {
+            ZStack {
+                List(selection: $selectedTodo) {
+                    ForEach($todos, id: \.self) { $todo in
+                        NavigationLink(value: todo) {
+                            TodoItemView(todo: $todo)
+                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                    Button(role: .destructive) {
+                                        guard let id = todo.id else { return }
+                                        Task {
+                                            try? await database.deleteTodos(ids: [id])
+                                        }
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
+                                }
+                        }
                     }
                 }
-            }
-            .scrollDismissesKeyboard(.immediately)
-            .listStyle(.plain)
-            .onAppear {
-                getTodos()
-            }
-            
-            Button(action: {
-                withAnimation {
-                    do {
-                        let todo = try database.createTodo(name: "")
-                        todos.insert(todo, at: 0)
-                        focusedTodo = todo.id
-                    } catch {
-                        errorMessage = error.localizedDescription
-                    }
+                .navigationTitle("Todos")
+                .scrollDismissesKeyboard(.immediately)
+                .listStyle(.plain)
+                .onAppear {
+                    getTodos()
                 }
-            }) {
-                Image(systemName: "plus")
-                    .font(.title)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(
-                        Circle()
-                            .fill(Color.accentColor)
-                    )
+                
+                Button(action: {
+                    withAnimation {
+                        do {
+                            let todo = try database.createTodo(name: "")
+                            todos.insert(todo, at: 0)
+                        } catch {
+                            errorMessage = error.localizedDescription
+                        }
+                    }
+                }) {
+                    Image(systemName: "plus")
+                        .font(.title)
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(
+                            Circle()
+                                .fill(Color.accentColor)
+                        )
+                }
+                .frame(maxHeight: .infinity, alignment: .bottom)
+                .padding(.bottom)
             }
-            .frame(maxHeight: .infinity, alignment: .bottom)
-            .padding(.bottom)
+        } else {
+            Text("Select a menu")
         }
     }
     
     private func getTodos() {
         do {
-            todos = try database.getUncompletedTodos()
+            todos = try database.getTodos(orderBy: .completedDate)
         } catch {
             errorMessage = error.localizedDescription
         }
-    }
-}
-
-struct TodoListView_Previews: PreviewProvider {
-    static var previews: some View {
-        TodoListView(menu: [Menu].menus[0])
     }
 }

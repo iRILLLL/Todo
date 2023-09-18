@@ -33,6 +33,7 @@ private extension AppDatabase {
             try db.create(table: "todo", body: { t in
                 t.autoIncrementedPrimaryKey("id")
                 t.column("name", .text).notNull()
+                t.column("createdAt", .datetime).notNull()
                 t.column("completedAt", .datetime)
             })
         }
@@ -48,9 +49,16 @@ private extension AppDatabase {
                     if i % 2 == 0 {
                         let date = Date.now
                         let randomDate = Int.random(in: 0 ..< 100000)
-                        _ = try Todo(name: "placeholder #\(random)", completedAt: date.addingTimeInterval(TimeInterval(randomDate))).inserted(db)
+                        _ = try Todo(
+                            name: "placeholder #\(random)",
+                            completedAt: date.addingTimeInterval(TimeInterval(randomDate)),
+                            createdAt: Date()
+                        ).inserted(db)
                     } else {
-                        _ = try Todo(name: "placeholder #\(random)").inserted(db)
+                        _ = try Todo(
+                            name: "placeholder #\(random)",
+                            createdAt: Date()
+                        ).inserted(db)
                     }
                 }
             }
@@ -73,7 +81,7 @@ extension AppDatabase {
     
     func createTodo(name: String) throws -> Todo {
         try writer.write { db in
-            return try Todo(name: name).inserted(db)
+            return try Todo(name: name, createdAt: Date()).inserted(db)
         }
     }
     

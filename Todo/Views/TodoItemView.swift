@@ -8,7 +8,7 @@ struct TodoItemView: View {
         HStack {
             CheckboxView(isChecked: $todo.isCompleted)
             
-            TextField("Todo", text: $todo.name)
+            Text(todo.name)
                 .strikethrough(todo.isCompleted)
                 .foregroundColor(todo.isCompleted ? .secondary : .primary)
                 .multilineTextAlignment(.leading)

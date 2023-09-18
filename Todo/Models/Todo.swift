@@ -5,6 +5,7 @@ struct Todo: Identifiable, Hashable {
     var id: Int64?
     var name: String
     var completedAt: Date?
+    var createdAt: Date
     
     var isCompleted: Bool {
         get { completedAt != nil }
@@ -17,6 +18,7 @@ extension Todo: Codable, FetchableRecord, MutablePersistableRecord {
     fileprivate enum Columns {
         static let name = Column(CodingKeys.name)
         static let completedAt = Column(CodingKeys.completedAt)
+        static let createdAt = Column(CodingKeys.createdAt)
     }
     
     mutating func didInsert(_ inserted: InsertionSuccess) {
