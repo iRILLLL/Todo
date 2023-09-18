@@ -12,52 +12,44 @@ struct TodoListView: View {
     
     var body: some View {
         if menu != nil {
-            ZStack {
-                List(selection: $selectedTodo) {
-                    ForEach($todos, id: \.self) { $todo in
-                        NavigationLink(value: todo) {
-                            TodoItemView(todo: $todo)
-                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                    Button(role: .destructive) {
-                                        guard let id = todo.id else { return }
-                                        Task {
-                                            try? await database.deleteTodos(ids: [id])
-                                        }
-                                    } label: {
-                                        Label("Delete", systemImage: "trash")
+            List(selection: $selectedTodo) {
+                ForEach($todos, id: \.self) { $todo in
+                    NavigationLink(value: todo) {
+                        TodoItemView(todo: $todo)
+                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                Button(role: .destructive) {
+                                    guard let id = todo.id else { return }
+                                    Task {
+                                        try? await database.deleteTodos(ids: [id])
                                     }
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
                                 }
-                        }
+                            }
                     }
                 }
-                .navigationTitle("Todos")
-                .scrollDismissesKeyboard(.immediately)
-                .listStyle(.plain)
-                .onAppear {
-                    getTodos()
-                }
-                
-                Button(action: {
-                    withAnimation {
-                        do {
-                            let todo = try database.createTodo(name: "")
-                            todos.insert(todo, at: 0)
-                        } catch {
-                            errorMessage = error.localizedDescription
+            }
+            .toolbar(id: UUID().uuidString) {
+                ToolbarItem(id: UUID().uuidString, placement: .primaryAction) {
+                    Button {
+                        withAnimation {
+                            do {
+                                let todo = try database.createTodo(name: "")
+                                todos.insert(todo, at: 0)
+                            } catch {
+                                errorMessage = error.localizedDescription
+                            }
                         }
+                    } label: {
+                        Image(systemName: "plus")
                     }
-                }) {
-                    Image(systemName: "plus")
-                        .font(.title)
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(
-                            Circle()
-                                .fill(Color.accentColor)
-                        )
                 }
-                .frame(maxHeight: .infinity, alignment: .bottom)
-                .padding(.bottom)
+            }
+            .navigationTitle("Todos")
+            .scrollDismissesKeyboard(.immediately)
+            .listStyle(.plain)
+            .onAppear {
+                getTodos()
             }
         } else {
             Text("Select a menu")
