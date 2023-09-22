@@ -7,52 +7,64 @@ struct TodoListView: View {
     @State private var todos: [Todo] = []
     @State private var errorMessage: String?
     
-    @Binding var selectedTodo: Todo?
-    let menu: Menu?
+    @FocusState private var focusedTodo: Int64?
+    
+    let menu: Menu
     
     var body: some View {
-        if menu != nil {
-            List(selection: $selectedTodo) {
-                ForEach($todos, id: \.self) { $todo in
-                    NavigationLink(value: todo) {
-                        TodoItemView(todo: $todo)
-                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                Button(role: .destructive) {
-                                    guard let id = todo.id else { return }
-                                    Task {
-                                        try? await database.deleteTodos(ids: [id])
-                                    }
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
+        List {
+            ForEach($todos, id: \.self) { $todo in
+                NavigationLink(value: todo) {
+                    TodoItemView(todo: .init(
+                        get: { todo },
+                        set: { mutatedTodo in
+                            let isToggleChanged = mutatedTodo.isCompleted != todo.isCompleted
+                            if isToggleChanged {
+                                do {
+                                    try database.toggleCompletedTodo(&todo)
+                                } catch {
+                                    print(error)
                                 }
                             }
-                    }
-                }
-            }
-            .toolbar(id: UUID().uuidString) {
-                ToolbarItem(id: UUID().uuidString, placement: .primaryAction) {
-                    Button {
-                        withAnimation {
-                            do {
-                                let todo = try database.createTodo(name: "")
-                                todos.insert(todo, at: 0)
-                            } catch {
-                                errorMessage = error.localizedDescription
+                            getTodos()
+                        }
+                    ))
+                        .focused($focusedTodo, equals: todo.id)
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button(role: .destructive) {
+                                guard let id = todo.id else { return }
+                                Task {
+                                    try? await database.deleteTodos(ids: [id])
+                                }
+                            } label: {
+                                Label("Delete", systemImage: "trash")
                             }
                         }
-                    } label: {
-                        Image(systemName: "plus")
-                    }
                 }
             }
-            .navigationTitle("Todos")
-            .scrollDismissesKeyboard(.immediately)
-            .listStyle(.plain)
-            .onAppear {
-                getTodos()
+        }
+        .toolbar(id: UUID().uuidString) {
+            ToolbarItem(id: UUID().uuidString, placement: .primaryAction) {
+                Button {
+                    withAnimation {
+                        do {
+                            let todo = try database.createTodo(name: "Todo")
+                            todos.insert(todo, at: 0)
+                            focusedTodo = todo.id
+                        } catch {
+                            errorMessage = error.localizedDescription
+                        }
+                    }
+                } label: {
+                    Image(systemName: "plus")
+                }
             }
-        } else {
-            Text("Select a menu")
+        }
+        .navigationTitle("Todos")
+        .scrollDismissesKeyboard(.immediately)
+        .listStyle(.plain)
+        .onAppear {
+            getTodos()
         }
     }
     

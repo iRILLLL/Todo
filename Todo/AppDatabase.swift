@@ -79,9 +79,20 @@ extension AppDatabase {
         }
     }
     
+    func toggleCompletedTodo(_ todo: inout Todo) throws {
+        if !todo.isCompleted {
+            todo.completedAt = Date()
+        } else {
+            todo.completedAt = nil
+        }
+        try writer.write { db in
+            try todo.save(db)
+        }
+    }
+    
     func createTodo(name: String) throws -> Todo {
         try writer.write { db in
-            return try Todo(name: name, createdAt: Date()).inserted(db)
+            try Todo(name: name, createdAt: Date()).inserted(db)
         }
     }
     
