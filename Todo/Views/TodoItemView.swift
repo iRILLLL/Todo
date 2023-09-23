@@ -19,6 +19,16 @@ struct TodoItemView: View {
                 .onSubmit {
                     
                 }
+                .fixedSize()
+            
+            Spacer()
+            
+            Button {
+                
+            } label: {
+                Image(systemName: todo.isImportant ? "star.fill" : "star")
+            }
+
         }
     }
 }

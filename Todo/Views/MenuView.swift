@@ -4,8 +4,10 @@ struct MenuView: View {
     
     let menus: [Menu] = .menus
     
+    @State private var navPath = NavigationPath()
+    
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navPath) {
             List() {
                 Section {
                     ForEach(menus, id: \.self) { menu in
@@ -21,7 +23,7 @@ struct MenuView: View {
             .navigationTitle("Home")
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Menu.self) { menu in
-                TodoListView(menu: menu)
+                TodoListView(menu: menu, navPath: $navPath)
             }
             .navigationDestination(for: Todo.self) { todo in
                 TodoDetailView(todo: todo)

@@ -6,6 +6,7 @@ struct Todo: Identifiable, Hashable {
     var name: String
     var completedAt: Date?
     var createdAt: Date
+    var isImportant: Bool
     
     var isCompleted: Bool {
         get { completedAt != nil }
@@ -19,6 +20,7 @@ extension Todo: Codable, FetchableRecord, MutablePersistableRecord {
         static let name = Column(CodingKeys.name)
         static let completedAt = Column(CodingKeys.completedAt)
         static let createdAt = Column(CodingKeys.createdAt)
+        static let isImportant = Column(CodingKeys.isImportant)
     }
     
     mutating func didInsert(_ inserted: InsertionSuccess) {
@@ -37,6 +39,6 @@ extension DerivableRequest<Todo> {
     }
     
     func orderedByCompletedDate() -> Self {
-        order(Todo.Columns.completedAt.collating(.localizedCaseInsensitiveCompare))
+        order(Todo.Columns.completedAt.asc, Todo.Columns.createdAt.desc)
     }
 }

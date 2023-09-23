@@ -10,7 +10,7 @@ extension Array where Element == Menu {
     static var menus: [Menu] {
         return [
             .init(id: UUID(), icon: "sun.max", text: "Today"),
-            .init(id: UUID(), icon: "archivebox", text: "Completed")
+            .init(id: UUID(), icon: "star", text: "Important")
         ]
     }
 }

@@ -2,7 +2,7 @@ import SwiftUI
 
 struct TodoListView: View {
     
-    @EnvironmentObject var database: AppDatabase
+    @EnvironmentObject private var database: AppDatabase
     
     @State private var todos: [Todo] = []
     @State private var errorMessage: String?
@@ -10,11 +10,14 @@ struct TodoListView: View {
     @FocusState private var focusedTodo: Int64?
     
     let menu: Menu
+    @Binding var navPath: NavigationPath
     
     var body: some View {
         List {
             ForEach($todos, id: \.self) { $todo in
-                NavigationLink(value: todo) {
+                Button {
+                    navPath.append(todo)
+                } label: {
                     TodoItemView(todo: .init(
                         get: { todo },
                         set: { mutatedTodo in
@@ -25,8 +28,8 @@ struct TodoListView: View {
                                 } catch {
                                     print(error)
                                 }
+                                getTodos()
                             }
-                            getTodos()
                         }
                     ))
                         .focused($focusedTodo, equals: todo.id)
@@ -41,6 +44,7 @@ struct TodoListView: View {
                             }
                         }
                 }
+
             }
         }
         .toolbar(id: UUID().uuidString) {
@@ -74,5 +78,11 @@ struct TodoListView: View {
         } catch {
             errorMessage = error.localizedDescription
         }
+    }
+}
+
+private struct HideCaratButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
     }
 }

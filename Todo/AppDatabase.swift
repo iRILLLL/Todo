@@ -35,6 +35,7 @@ private extension AppDatabase {
                 t.column("name", .text).notNull()
                 t.column("createdAt", .datetime).notNull()
                 t.column("completedAt", .datetime)
+                t.column("isImportant", .boolean)
             })
         }
         
@@ -52,12 +53,14 @@ private extension AppDatabase {
                         _ = try Todo(
                             name: "placeholder #\(random)",
                             completedAt: date.addingTimeInterval(TimeInterval(randomDate)),
-                            createdAt: Date()
+                            createdAt: Date(), 
+                            isImportant: false
                         ).inserted(db)
                     } else {
                         _ = try Todo(
                             name: "placeholder #\(random)",
-                            createdAt: Date()
+                            createdAt: Date(),
+                            isImportant: true
                         ).inserted(db)
                     }
                 }
@@ -92,7 +95,11 @@ extension AppDatabase {
     
     func createTodo(name: String) throws -> Todo {
         try writer.write { db in
-            try Todo(name: name, createdAt: Date()).inserted(db)
+            try Todo(
+                name: name,
+                createdAt: Date(),
+                isImportant: false
+            ).inserted(db)
         }
     }
     

@@ -6,20 +6,38 @@ struct TodoDetailView: View {
     
     @State private var name: String = ""
     
-    enum Field {
-        case name
-    }
-    
-    @FocusState private var focusedField: Field?
-    
     var body: some View {
         Form {
             Section {
                 TextField(todo.name, text: $name)
-                    .focused($focusedField, equals: .name)
+            }
+            Section {
+                Button {
+                    
+                } label: {
+                    HStack {
+                        Image(systemName: "bell")
+                        Text("Remind Me")
+                    }
+                }
+                Button {
+                    
+                } label: {
+                    HStack {
+                        Image(systemName: "calendar")
+                        Text("Add Due Date")
+                    }
+                }
             }
         }
         .toolbar(id: UUID().uuidString) {
+            ToolbarItem(id: UUID().uuidString, placement: .primaryAction) {
+                Button {
+                    
+                } label: {
+                    Image(systemName: "star")
+                }
+            }
             ToolbarItem(id: UUID().uuidString, placement: .primaryAction) {
                 Button {
                     
@@ -32,9 +50,6 @@ struct TodoDetailView: View {
         .onAppear {
             if todo.name != "Todo" {
                 name = todo.name
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                focusedField = .name
             }
         }
     }
