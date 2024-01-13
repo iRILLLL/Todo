@@ -1,44 +1,41 @@
 import SwiftUI
+import SwiftData
 
 struct TodoListView: View {
     
-    @EnvironmentObject private var database: AppDatabase
+    private var context: ModelContext
+    @State private var viewModel: ViewModel
+    @Binding private var navPath: NavigationPath
+    private let menu: Menu
     
-    @State private var todos: [Todo] = []
-    @State private var errorMessage: String?
+    init(
+        context: ModelContext,
+        navPath: Binding<NavigationPath>,
+        menu: Menu
+    ) {
+        let viewModel = ViewModel(context: context)
+        _viewModel = State(initialValue: viewModel)
+        _navPath = navPath
+        self.menu = menu
+        self.context = context
+    }
     
-    @FocusState private var focusedTodo: Int64?
-    
-    let menu: Menu
-    @Binding var navPath: NavigationPath
+    @FocusState private var focusedTodo: UUID?
     
     var body: some View {
         List {
-            ForEach($todos, id: \.self) { $todo in
+            ForEach(viewModel.todos, id: \.self) { todo in
                 Button {
                     navPath.append(todo)
                 } label: {
-                    TodoItemView(todo: .init(
-                        get: { todo },
-                        set: { mutatedTodo in
-                            let isToggleChanged = mutatedTodo.isCompleted != todo.isCompleted
-                            if isToggleChanged {
-                                do {
-                                    try database.toggleCompletedTodo(&todo)
-                                } catch {
-                                    print(error)
-                                }
-                                getTodos()
-                            }
-                        }
-                    ))
+                    TodoItemView(context: self.context, todo: todo)
                         .focused($focusedTodo, equals: todo.id)
                         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                             Button(role: .destructive) {
-                                guard let id = todo.id else { return }
-                                Task {
-                                    try? await database.deleteTodos(ids: [id])
-                                }
+//                                guard let id = todo.id else { return }
+//                                Task {
+//                                    try? await database.deleteTodos(ids: [id])
+//                                }
                             } label: {
                                 Label("Delete", systemImage: "trash")
                             }
@@ -51,13 +48,8 @@ struct TodoListView: View {
             ToolbarItem(id: UUID().uuidString, placement: .primaryAction) {
                 Button {
                     withAnimation {
-                        do {
-                            let todo = try database.createTodo(name: "Todo")
-                            todos.insert(todo, at: 0)
-                            focusedTodo = todo.id
-                        } catch {
-                            errorMessage = error.localizedDescription
-                        }
+                        let id = viewModel.addNewTodo()
+                        focusedTodo = id
                     }
                 } label: {
                     Image(systemName: "plus")
@@ -66,23 +58,42 @@ struct TodoListView: View {
         }
         .navigationTitle("Todos")
         .scrollDismissesKeyboard(.immediately)
-        .listStyle(.plain)
-        .onAppear {
-            getTodos()
-        }
-    }
-    
-    private func getTodos() {
-        do {
-            todos = try database.getTodos(orderBy: .completedDate)
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-    }
+        .listStyle(.plain)    }
 }
 
-private struct HideCaratButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
+extension TodoListView {
+    
+    @Observable
+    final class ViewModel {
+        
+        var context: ModelContext
+        var todos: [Todo] = []
+        
+        init(context: ModelContext) {
+            self.context = context
+            fetchTodos()
+        }
+        
+        func addNewTodo() -> UUID {
+            let id = UUID()
+            let todo = Todo(
+                id: id,
+                createdAt: Date()
+            )
+            todos.insert(todo, at: 0)
+            context.insert(todo)
+            return id
+        }
+        
+        func fetchTodos() {
+            let todos = FetchDescriptor<Todo>(
+                sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
+            )
+            do {
+                self.todos = try context.fetch(todos)
+            } catch {
+                print(error)
+            }
+        }
     }
 }

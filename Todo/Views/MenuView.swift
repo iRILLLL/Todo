@@ -1,8 +1,15 @@
 import SwiftUI
+import SwiftData
 
 struct MenuView: View {
     
     let menus: [Menu] = .menus
+    
+    private var context: ModelContext
+    
+    init(context: ModelContext) {
+        self.context = context
+    }
     
     @State private var navPath = NavigationPath()
     
@@ -23,7 +30,11 @@ struct MenuView: View {
             .navigationTitle("Home")
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Menu.self) { menu in
-                TodoListView(menu: menu, navPath: $navPath)
+                TodoListView(
+                    context: self.context,
+                    navPath: $navPath,
+                    menu: menu
+                )
             }
             .navigationDestination(for: Todo.self) { todo in
                 TodoDetailView(todo: todo)

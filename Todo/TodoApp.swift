@@ -1,14 +1,23 @@
 import SwiftUI
+import SwiftData
 
 @main
 struct TodoApp: App {
+        
+    let container: ModelContainer
     
-    @StateObject var database = try! AppDatabase()
+    init() {
+            do {
+                container = try ModelContainer(for: Todo.self, Step.self)
+            } catch {
+                fatalError(error.localizedDescription)
+            }
+        }
     
     var body: some Scene {
         WindowGroup {
-            MenuView()
-                .environmentObject(database)
+            MenuView(context: container.mainContext)
+                .modelContainer(container)
         }
     }
 }
