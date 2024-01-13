@@ -2,29 +2,29 @@ import SwiftData
 import Foundation
 
 @Model
-final class Todo {
+public final class Todo {
     
     @Attribute(.unique) 
-    var id: UUID
+    public var id: UUID
     
-    var name: String
-    var isImportant: Bool
+    public var name: String
+    public var isImportant: Bool
     
     @Attribute(originalName: "completed_at")
-    var completedAt: Date?
+    public var completedAt: Date?
     
     @Attribute(originalName: "created_at")
-    var createdAt: Date
+    public var createdAt: Date
     
     @Relationship(deleteRule: .cascade)
-    var steps: [Step]?
+    public var steps: [Step]?
     
     @Transient
-    var isCompleted: Bool {
+    public var isCompleted: Bool {
         completedAt != nil
     }
     
-    init(
+    public init(
         id: UUID,
         name: String = "",
         isImportant: Bool = false,
@@ -39,22 +39,6 @@ final class Todo {
     }
 }
 
-@Model
-final class Step {
-    
-    @Attribute(.unique)
-    var id: UUID
-    
-    var name: String
-    
-    init(
-        id: UUID,
-        name: String
-    ) {
-        self.id = id
-        self.name = name
-    }
-}
 //import GRDB
 //import Foundation
 //

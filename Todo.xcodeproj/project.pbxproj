@@ -7,33 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8F39F3FF2AA63B8D0096F6ED /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F39F3FE2AA63B8D0096F6ED /* Menu.swift */; };
+		8F295E1C2B52B8CB001435C2 /* TodoUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8F295E1B2B52B8CB001435C2 /* TodoUI */; };
 		8F39F4012AA63B930096F6ED /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F39F4002AA63B930096F6ED /* MenuView.swift */; };
 		8F3B2A9F2AA4DC350039E5A1 /* TodoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3B2A9E2AA4DC350039E5A1 /* TodoApp.swift */; };
 		8F3B2AA32AA4DC360039E5A1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F3B2AA22AA4DC360039E5A1 /* Assets.xcassets */; };
 		8F3B2AA62AA4DC360039E5A1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F3B2AA52AA4DC360039E5A1 /* Preview Assets.xcassets */; };
-		8F3B2AAE2AA4DC560039E5A1 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 8F3B2AAD2AA4DC560039E5A1 /* GRDB */; };
 		8F3B2AB02AA4DC870039E5A1 /* AppDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3B2AAF2AA4DC870039E5A1 /* AppDatabase.swift */; };
-		8F3B2AB22AA4E04A0039E5A1 /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3B2AB12AA4E04A0039E5A1 /* Todo.swift */; };
-		8F3B2AB42AA4E2290039E5A1 /* TodoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3B2AB32AA4E2290039E5A1 /* TodoListView.swift */; };
-		8F3B2AB62AA4E2330039E5A1 /* TodoDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3B2AB52AA4E2330039E5A1 /* TodoDetailView.swift */; };
-		8F62E0F12AAEE77D0058673E /* CheckboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62E0F02AAEE77D0058673E /* CheckboxView.swift */; };
-		8FD285872AA787E100896C95 /* TodoItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD285862AA787E100896C95 /* TodoItemView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8F39F3FE2AA63B8D0096F6ED /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
+		8F295E192B52B6ED001435C2 /* features */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = features; sourceTree = "<group>"; };
 		8F39F4002AA63B930096F6ED /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		8F3B2A9B2AA4DC350039E5A1 /* Todo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F3B2A9E2AA4DC350039E5A1 /* TodoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoApp.swift; sourceTree = "<group>"; };
 		8F3B2AA22AA4DC360039E5A1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8F3B2AA52AA4DC360039E5A1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		8F3B2AAF2AA4DC870039E5A1 /* AppDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDatabase.swift; sourceTree = "<group>"; };
-		8F3B2AB12AA4E04A0039E5A1 /* Todo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
-		8F3B2AB32AA4E2290039E5A1 /* TodoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListView.swift; sourceTree = "<group>"; };
-		8F3B2AB52AA4E2330039E5A1 /* TodoDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoDetailView.swift; sourceTree = "<group>"; };
-		8F62E0F02AAEE77D0058673E /* CheckboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxView.swift; sourceTree = "<group>"; };
-		8FD285862AA787E100896C95 /* TodoItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,30 +30,24 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F3B2AAE2AA4DC560039E5A1 /* GRDB in Frameworks */,
+				8F295E1C2B52B8CB001435C2 /* TodoUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8F39F3FB2AA639D00096F6ED /* Models */ = {
+		8F295E1A2B52B8CB001435C2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8F39F3FE2AA63B8D0096F6ED /* Menu.swift */,
-				8F3B2AB12AA4E04A0039E5A1 /* Todo.swift */,
 			);
-			path = Models;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		8F39F4022AA63F0F0096F6ED /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				8F3B2AB32AA4E2290039E5A1 /* TodoListView.swift */,
 				8F39F4002AA63B930096F6ED /* MenuView.swift */,
-				8F3B2AB52AA4E2330039E5A1 /* TodoDetailView.swift */,
-				8FD285862AA787E100896C95 /* TodoItemView.swift */,
-				8F62E0F02AAEE77D0058673E /* CheckboxView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -72,8 +55,10 @@
 		8F3B2A922AA4DC350039E5A1 = {
 			isa = PBXGroup;
 			children = (
+				8F295E192B52B6ED001435C2 /* features */,
 				8F3B2A9D2AA4DC350039E5A1 /* Todo */,
 				8F3B2A9C2AA4DC350039E5A1 /* Products */,
+				8F295E1A2B52B8CB001435C2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -91,7 +76,6 @@
 				8F3B2A9E2AA4DC350039E5A1 /* TodoApp.swift */,
 				8F3B2AAF2AA4DC870039E5A1 /* AppDatabase.swift */,
 				8F39F4022AA63F0F0096F6ED /* Views */,
-				8F39F3FB2AA639D00096F6ED /* Models */,
 				8F3B2AA22AA4DC360039E5A1 /* Assets.xcassets */,
 				8F3B2AA42AA4DC360039E5A1 /* Preview Content */,
 			);
@@ -123,7 +107,7 @@
 			);
 			name = Todo;
 			packageProductDependencies = (
-				8F3B2AAD2AA4DC560039E5A1 /* GRDB */,
+				8F295E1B2B52B8CB001435C2 /* TodoUI */,
 			);
 			productName = Todo;
 			productReference = 8F3B2A9B2AA4DC350039E5A1 /* Todo.app */;
@@ -137,7 +121,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					8F3B2A9A2AA4DC350039E5A1 = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -154,7 +138,6 @@
 			);
 			mainGroup = 8F3B2A922AA4DC350039E5A1;
 			packageReferences = (
-				8F3B2AAC2AA4DC560039E5A1 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
 			);
 			productRefGroup = 8F3B2A9C2AA4DC350039E5A1 /* Products */;
 			projectDirPath = "";
@@ -182,15 +165,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F62E0F12AAEE77D0058673E /* CheckboxView.swift in Sources */,
 				8F3B2AB02AA4DC870039E5A1 /* AppDatabase.swift in Sources */,
 				8F39F4012AA63B930096F6ED /* MenuView.swift in Sources */,
-				8F3B2AB62AA4E2330039E5A1 /* TodoDetailView.swift in Sources */,
-				8F39F3FF2AA63B8D0096F6ED /* Menu.swift in Sources */,
-				8F3B2AB42AA4E2290039E5A1 /* TodoListView.swift in Sources */,
-				8FD285872AA787E100896C95 /* TodoItemView.swift in Sources */,
 				8F3B2A9F2AA4DC350039E5A1 /* TodoApp.swift in Sources */,
-				8F3B2AB22AA4E04A0039E5A1 /* Todo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,6 +178,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -233,6 +211,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -261,6 +240,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -293,6 +273,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -398,22 +379,10 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		8F3B2AAC2AA4DC560039E5A1 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/groue/GRDB.swift.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
-		8F3B2AAD2AA4DC560039E5A1 /* GRDB */ = {
+		8F295E1B2B52B8CB001435C2 /* TodoUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 8F3B2AAC2AA4DC560039E5A1 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
-			productName = GRDB;
+			productName = TodoUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

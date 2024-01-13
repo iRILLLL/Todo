@@ -1,9 +1,11 @@
 import SwiftUI
 import SwiftData
+import TodoUI
+import TodoInterface
 
 struct MenuView: View {
     
-    let menus: [Menu] = .menus
+    let menus: [TodoInterface.Menu] = .menus
     
     private var context: ModelContext
     

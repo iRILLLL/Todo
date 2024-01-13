@@ -1,12 +1,17 @@
 import SwiftUI
+import TodoInterface
 
-struct TodoDetailView: View {
+public struct TodoDetailView: View {
     
     let todo: Todo
     
+    public init(todo: Todo) {
+        self.todo = todo
+    }
+    
     @State private var name: String = ""
     
-    var body: some View {
+    public var body: some View {
         Form {
             Section {
                 TextField(todo.name, text: $name)

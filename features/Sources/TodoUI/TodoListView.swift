@@ -1,17 +1,18 @@
 import SwiftUI
 import SwiftData
+import TodoInterface
 
-struct TodoListView: View {
+public struct TodoListView: View {
     
     private var context: ModelContext
     @State private var viewModel: ViewModel
     @Binding private var navPath: NavigationPath
-    private let menu: Menu
+    private let menu: TodoInterface.Menu
     
-    init(
+    public init(
         context: ModelContext,
         navPath: Binding<NavigationPath>,
-        menu: Menu
+        menu: TodoInterface.Menu
     ) {
         let viewModel = ViewModel(context: context)
         _viewModel = State(initialValue: viewModel)
@@ -22,7 +23,7 @@ struct TodoListView: View {
     
     @FocusState private var focusedTodo: UUID?
     
-    var body: some View {
+    public var body: some View {
         List {
             ForEach(viewModel.todos, id: \.self) { todo in
                 Button {

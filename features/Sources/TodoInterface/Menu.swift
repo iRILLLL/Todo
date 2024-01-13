@@ -1,13 +1,13 @@
 import Foundation
 
-struct Menu: Identifiable, Hashable {
-    let id: UUID
-    let icon: String
-    let text: String
+public struct Menu: Identifiable, Hashable {
+    public let id: UUID
+    public let icon: String
+    public let text: String
 }
 
 extension Array where Element == Menu {
-    static var menus: [Menu] {
+    public static var menus: [Menu] {
         return [
             .init(id: UUID(), icon: "sun.max", text: "Today"),
             .init(id: UUID(), icon: "star", text: "Important")
