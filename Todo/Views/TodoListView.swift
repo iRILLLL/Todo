@@ -28,20 +28,24 @@ struct TodoListView: View {
                 Button {
                     navPath.append(todo)
                 } label: {
-                    TodoItemView(context: self.context, todo: todo)
-                        .focused($focusedTodo, equals: todo.id)
-                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                            Button(role: .destructive) {
-//                                guard let id = todo.id else { return }
-//                                Task {
-//                                    try? await database.deleteTodos(ids: [id])
-//                                }
-                            } label: {
-                                Label("Delete", systemImage: "trash")
+                    TodoItemView(
+                        todo: todo,
+                        isCompleted: .init(
+                            get: { todo.isCompleted },
+                            set: { value in
+                                viewModel.changeCompleted(value: value, of: todo)
                             }
-                        }
+                        )
+                    )
+                    .focused($focusedTodo, equals: todo.id)
                 }
-
+                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                    Button(role: .destructive) {
+                        viewModel.delete(todo: todo)
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+                }
             }
         }
         .toolbar(id: UUID().uuidString) {
@@ -80,14 +84,27 @@ extension TodoListView {
                 id: id,
                 createdAt: Date()
             )
-            todos.insert(todo, at: 0)
             context.insert(todo)
+            fetchTodos()
             return id
+        }
+        
+        func changeCompleted(value: Bool, of todo: Todo) {
+            guard let index = todos.firstIndex(of: todo) else { return }
+            todos[index].completedAt = value ? Date() : nil
+            fetchTodos()
+        }
+        
+        func delete(todo: Todo) {
+            context.delete(todo)
         }
         
         func fetchTodos() {
             let todos = FetchDescriptor<Todo>(
-                sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
+                sortBy: [
+                    SortDescriptor(\.completedAt, order: .forward),
+                    SortDescriptor(\.createdAt, order: .reverse)
+                ]
             )
             do {
                 self.todos = try context.fetch(todos)
