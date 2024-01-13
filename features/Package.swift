@@ -7,6 +7,7 @@ let package = Package(
     name: "features",
     platforms: [
         .iOS(.v17),
+        .macOS(.v10_13),
     ],
     products: [
         .singleTargetLibrary("TodoInterface"),

@@ -4,28 +4,43 @@ import TodoInterface
 
 public struct TodoListView: View {
     
-    private var context: ModelContext
-    @State private var viewModel: ViewModel
+    @Query private var todos: [Todo]
+    @Environment(\.modelContext) var modelContext
+    @State private var selectedTodo: Todo?
+    
     @Binding private var navPath: NavigationPath
-    private let menu: TodoInterface.Menu
+    private var menu: SidebarMenu?
     
     public init(
-        context: ModelContext,
         navPath: Binding<NavigationPath>,
-        menu: TodoInterface.Menu
+        menu: SidebarMenu?
     ) {
-        let viewModel = ViewModel(context: context)
-        _viewModel = State(initialValue: viewModel)
         _navPath = navPath
         self.menu = menu
-        self.context = context
+        
+        let sort: [SortDescriptor] = [
+            SortDescriptor(\Todo.completedAt, order: .forward),
+            SortDescriptor(\.createdAt, order: .reverse)
+        ]
+        
+        switch menu {
+        case .today:
+            _todos = Query(sort: sort)
+        case .important:
+            _todos = Query(
+                filter: #Predicate { $0.isImportant },
+                sort: sort
+            )
+        case .none:
+            _todos = Query()
+        }
     }
     
     @FocusState private var focusedTodo: UUID?
     
     public var body: some View {
         List {
-            ForEach(viewModel.todos, id: \.self) { todo in
+            ForEach(todos, id: \.self) { todo in
                 Button {
                     navPath.append(todo)
                 } label: {
@@ -34,7 +49,7 @@ public struct TodoListView: View {
                         isCompleted: .init(
                             get: { todo.isCompleted },
                             set: { value in
-                                viewModel.changeCompleted(value: value, of: todo)
+                                todo.completedAt = value ? Date() : nil
                             }
                         )
                     )
@@ -42,18 +57,24 @@ public struct TodoListView: View {
                 }
                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                     Button(role: .destructive) {
-                        viewModel.delete(todo: todo)
+                        modelContext.delete(todo)
                     } label: {
                         Label("Delete", systemImage: "trash")
                     }
                 }
             }
         }
+        .animation(.default, value: todos)
         .toolbar(id: UUID().uuidString) {
             ToolbarItem(id: UUID().uuidString, placement: .primaryAction) {
                 Button {
                     withAnimation {
-                        let id = viewModel.addNewTodo()
+                        let id = UUID()
+                        let todo = Todo(
+                            id: id,
+                            createdAt: Date()
+                        )
+                        modelContext.insert(todo)
                         focusedTodo = id
                     }
                 } label: {
@@ -61,57 +82,8 @@ public struct TodoListView: View {
                 }
             }
         }
-        .navigationTitle("Todos")
+        .navigationTitle(menu?.text ?? "")
         .scrollDismissesKeyboard(.immediately)
-        .listStyle(.plain)    }
-}
-
-extension TodoListView {
-    
-    @Observable
-    final class ViewModel {
-        
-        var context: ModelContext
-        var todos: [Todo] = []
-        
-        init(context: ModelContext) {
-            self.context = context
-            fetchTodos()
-        }
-        
-        func addNewTodo() -> UUID {
-            let id = UUID()
-            let todo = Todo(
-                id: id,
-                createdAt: Date()
-            )
-            context.insert(todo)
-            fetchTodos()
-            return id
-        }
-        
-        func changeCompleted(value: Bool, of todo: Todo) {
-            guard let index = todos.firstIndex(of: todo) else { return }
-            todos[index].completedAt = value ? Date() : nil
-            fetchTodos()
-        }
-        
-        func delete(todo: Todo) {
-            context.delete(todo)
-        }
-        
-        func fetchTodos() {
-            let todos = FetchDescriptor<Todo>(
-                sortBy: [
-                    SortDescriptor(\.completedAt, order: .forward),
-                    SortDescriptor(\.createdAt, order: .reverse)
-                ]
-            )
-            do {
-                self.todos = try context.fetch(todos)
-            } catch {
-                print(error)
-            }
-        }
+        .listStyle(.plain)
     }
 }

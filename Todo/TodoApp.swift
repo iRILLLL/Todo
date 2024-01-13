@@ -17,7 +17,7 @@ struct TodoApp: App {
     
     var body: some Scene {
         WindowGroup {
-            MenuView(context: container.mainContext)
+            MenuView()
                 .modelContainer(container)
         }
     }

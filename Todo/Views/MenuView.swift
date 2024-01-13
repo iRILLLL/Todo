@@ -2,44 +2,56 @@ import SwiftUI
 import SwiftData
 import TodoUI
 import TodoInterface
+import os
 
 struct MenuView: View {
     
-    let menus: [TodoInterface.Menu] = .menus
-    
-    private var context: ModelContext
-    
-    init(context: ModelContext) {
-        self.context = context
-    }
-    
     @State private var navPath = NavigationPath()
+    @State private var selection: SidebarMenu? = .today
     
     var body: some View {
-        NavigationStack(path: $navPath) {
-            List() {
-                Section {
-                    ForEach(menus, id: \.self) { menu in
-                        NavigationLink(value: menu) {
-                            Label(menu.text, systemImage: menu.icon)
-                        }
-                    }
-                    .onMove { (source: IndexSet, dest: Int) in
-                        
-                    }
-                }
-            }
-            .navigationTitle("Home")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: Menu.self) { menu in
+        if UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac {
+            
+            NavigationSplitView {
+                SidebarView(selection: $selection)
+            } detail: {
                 TodoListView(
-                    context: self.context,
                     navPath: $navPath,
-                    menu: menu
+                    menu: selection
                 )
             }
-            .navigationDestination(for: Todo.self) { todo in
-                TodoDetailView(todo: todo)
+
+            
+        } else {
+            NavigationStack(path: $navPath) {
+                List() {
+                    Section {
+                        NavigationLink(value: SidebarMenu.today) {
+                            Label(
+                                SidebarMenu.today.text,
+                                systemImage: SidebarMenu.today.icon
+                            )
+                        }
+                        
+                        NavigationLink(value: SidebarMenu.important) {
+                            Label(
+                                SidebarMenu.important.text,
+                                systemImage: SidebarMenu.important.icon
+                            )
+                        }
+                    }
+                }
+                .navigationTitle("Home")
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationDestination(for: SidebarMenu.self) { menu in
+                    TodoListView(
+                        navPath: $navPath,
+                        menu: menu
+                    )
+                }
+                .navigationDestination(for: Todo.self) { todo in
+                    TodoDetailView(todo: todo)
+                }
             }
         }
     }
