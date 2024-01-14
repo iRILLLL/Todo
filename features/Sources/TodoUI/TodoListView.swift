@@ -52,6 +52,12 @@ public struct TodoListView: View {
             }
         }
         .animation(.default, value: viewModel.todos)
+        .onChange(of: focusedTodo) { oldValue, newValue in
+            guard
+                oldValue != nil && oldValue != newValue
+            else { return }
+            viewModel.keyboardFocusChanged()
+        }
         .toolbar(id: UUID().uuidString) {
             ToolbarItem(id: UUID().uuidString, placement: .primaryAction) {
                 Button {
@@ -77,6 +83,8 @@ extension TodoListView {
         
         private(set) var todos = [Todo]()
         
+        private var recentlyAddedTodo: Todo?
+        
         private let modelContext: ModelContext
         private let sidebarMenu: SidebarMenu?
         
@@ -93,12 +101,27 @@ extension TodoListView {
             modelContext.delete(todo)
         }
         
+        func keyboardFocusChanged() {
+            guard 
+                let recentlyAddedTodo,
+                recentlyAddedTodo.name.trimmingCharacters(in: .whitespacesAndNewlines) == ""
+            else {
+                self.recentlyAddedTodo = nil
+                return
+            }
+            
+            modelContext.delete(recentlyAddedTodo)
+            self.recentlyAddedTodo = nil
+            self.fetchTodos()
+        }
+        
         func addNewTodo() -> UUID {
             let id = UUID()
             let todo = Todo(
                 id: id,
                 createdAt: Date()
             )
+            self.recentlyAddedTodo = todo
             modelContext.insert(todo)
             fetchTodos()
             return id
