@@ -13,6 +13,9 @@ public final class Todo {
     @Attribute(originalName: "completed_at")
     public var completedAt: Date?
     
+    @Attribute(originalName: "due_at")
+    public var dueAt: Date?
+    
     @Attribute(originalName: "created_at")
     public var createdAt: Date
     
@@ -29,12 +32,14 @@ public final class Todo {
         name: String = "",
         isImportant: Bool = false,
         completedAt: Date? = nil,
+        dueAt: Date? = nil,
         createdAt: Date
     ) {
         self.id = id
         self.name = name
         self.isImportant = isImportant
         self.completedAt = completedAt
+        self.dueAt = dueAt
         self.createdAt = createdAt
     }
 }
