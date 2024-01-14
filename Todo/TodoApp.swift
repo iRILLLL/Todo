@@ -8,16 +8,16 @@ struct TodoApp: App {
     let container: ModelContainer
     
     init() {
-            do {
-                container = try ModelContainer(for: Todo.self, Step.self)
-            } catch {
-                fatalError(error.localizedDescription)
-            }
+        do {
+            container = try ModelContainer(for: Todo.self, Step.self)
+        } catch {
+            fatalError(error.localizedDescription)
         }
+    }
     
     var body: some Scene {
         WindowGroup {
-            MenuView()
+            MenuView(modelContext: container.mainContext)
                 .modelContainer(container)
         }
     }

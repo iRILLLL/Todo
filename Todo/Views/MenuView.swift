@@ -6,6 +6,12 @@ import os
 
 struct MenuView: View {
     
+    let modelContext: ModelContext
+    
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+    }
+    
     @State private var navPath = NavigationPath()
     @State private var selection: SidebarMenu? = .today
     
@@ -16,9 +22,11 @@ struct MenuView: View {
                 SidebarView(selection: $selection)
             } detail: {
                 TodoListView(
+                    modelContext: modelContext,
                     navPath: $navPath,
-                    menu: selection
+                    sidebarMenu: selection
                 )
+                .id(selection?.hashValue) // work around https://forums.developer.apple.com/forums/thread/707924
             }
 
             
@@ -43,10 +51,11 @@ struct MenuView: View {
                 }
                 .navigationTitle("Home")
                 .navigationBarTitleDisplayMode(.inline)
-                .navigationDestination(for: SidebarMenu.self) { menu in
+                .navigationDestination(for: SidebarMenu.self) { sidebarMenu in
                     TodoListView(
+                        modelContext: modelContext,
                         navPath: $navPath,
-                        menu: menu
+                        sidebarMenu: sidebarMenu
                     )
                 }
                 .navigationDestination(for: Todo.self) { todo in
