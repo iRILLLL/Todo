@@ -1,5 +1,6 @@
 import SwiftUI
 import TodoInterface
+import SwiftData
 
 public struct TodoDetailView: View {
     
