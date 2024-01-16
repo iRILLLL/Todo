@@ -99,6 +99,7 @@ extension TodoListView {
         
         func delete(todo: Todo) {
             modelContext.delete(todo)
+            fetchTodos()
         }
         
         func keyboardFocusChanged() {
