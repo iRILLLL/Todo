@@ -9,6 +9,7 @@ public final class Todo {
     
     public var name: String
     public var isImportant: Bool
+    public var group: TodoGroup
     
     @Attribute(originalName: "completed_at")
     public var completedAt: Date?
@@ -19,9 +20,6 @@ public final class Todo {
     @Attribute(originalName: "created_at")
     public var createdAt: Date
     
-    @Relationship(deleteRule: .cascade)
-    public var steps: [Step]?
-    
     @Transient
     public var isCompleted: Bool {
         completedAt != nil
@@ -31,6 +29,7 @@ public final class Todo {
         id: UUID,
         name: String = "",
         isImportant: Bool = false,
+        group: TodoGroup,
         completedAt: Date? = nil,
         dueAt: Date? = nil,
         createdAt: Date
@@ -38,6 +37,7 @@ public final class Todo {
         self.id = id
         self.name = name
         self.isImportant = isImportant
+        self.group = group
         self.completedAt = completedAt
         self.dueAt = dueAt
         self.createdAt = createdAt

@@ -6,21 +6,21 @@ public struct TodoListView: View {
     
     @State private var viewModel: ViewModel
     @Binding private var navPath: NavigationPath
-    private var sidebarMenu: SidebarMenu?
+    private var group: TodoGroup
     
     public init(
         modelContext: ModelContext,
         navPath: Binding<NavigationPath>,
-        sidebarMenu: SidebarMenu?
+        group: TodoGroup
     ) {
         _viewModel = State(
             initialValue: ViewModel(
                 modelContext: modelContext,
-                sidebarMenu: sidebarMenu
+                group: group
             )
         )
         _navPath = navPath
-        self.sidebarMenu = sidebarMenu
+        self.group = group
     }
     
     @FocusState private var focusedTodo: UUID?
@@ -76,7 +76,7 @@ public struct TodoListView: View {
                 }
             }
         }
-        .navigationTitle(sidebarMenu?.text ?? "")
+        .navigationTitle(group.name)
         .scrollDismissesKeyboard(.immediately)
         .listStyle(.plain)
     }
@@ -92,14 +92,14 @@ extension TodoListView {
         private var recentlyAddedTodo: Todo?
         
         private let modelContext: ModelContext
-        private let sidebarMenu: SidebarMenu?
+        private let group: TodoGroup
         
         init(
             modelContext: ModelContext,
-            sidebarMenu: SidebarMenu?
+            group: TodoGroup
         ) {
             self.modelContext = modelContext
-            self.sidebarMenu = sidebarMenu
+            self.group = group
             self.fetchTodos()
         }
         
@@ -126,6 +126,7 @@ extension TodoListView {
             let id = UUID()
             let todo = Todo(
                 id: id,
+                group: self.group,
                 createdAt: Date()
             )
             self.recentlyAddedTodo = todo
@@ -146,26 +147,17 @@ extension TodoListView {
         
         func fetchTodos() {
             
-            let sidebarMenu = self.sidebarMenu ?? .today
-            
             let sortBy: [SortDescriptor] = [
                 SortDescriptor(\Todo.completedAt, order: .forward),
                 SortDescriptor(\.createdAt, order: .reverse)
             ]
             
-            let descriptor: FetchDescriptor<Todo>
+            let groupName = self.group.name
             
-            switch sidebarMenu {
-            case .today:
-                descriptor = FetchDescriptor<Todo>(
-                    sortBy: sortBy
-                )
-            case .important:
-                descriptor = FetchDescriptor<Todo>(
-                    predicate: #Predicate { $0.isImportant },
-                    sortBy: sortBy
-                )
-            }
+            let descriptor = FetchDescriptor<Todo>(
+                predicate: #Predicate { $0.group.name == groupName },
+                sortBy: sortBy
+            )
             
             do {
                 self.todos = try modelContext.fetch(descriptor)

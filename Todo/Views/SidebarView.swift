@@ -1,27 +1,81 @@
 import SwiftUI
 import TodoInterface
+import TodoUI
+import SwiftData
 
 struct SidebarView: View {
     
-    @Binding var selection: SidebarMenu?
+    @State private var viewModel: ViewModel
+    @Binding private var navPath: NavigationPath
+    
+    public init(
+        modelContext: ModelContext,
+        navPath: Binding<NavigationPath>
+    ) {
+        _viewModel = State(
+            initialValue: ViewModel(
+                modelContext: modelContext
+            )
+        )
+        _navPath = navPath
+    }
     
     var body: some View {
-        List(selection: $selection) {
-            Section {
-                NavigationLink(value: SidebarMenu.today) {
-                    Label(
-                        SidebarMenu.today.text,
-                        systemImage: SidebarMenu.today.icon
-                    )
-                }
-                
-                NavigationLink(value: SidebarMenu.important) {
-                    Label(
-                        SidebarMenu.important.text,
-                        systemImage: SidebarMenu.important.icon
-                    )
+        NavigationStack(path: $navPath) {
+            List() {
+                Section {
+                    NavigationLink(value: TodoGroup.today) {
+                        Label(
+                            TodoGroup.today.name,
+                            systemImage: TodoGroup.today.iconName!
+                        )
+                    }
+                    
+                    NavigationLink(value: TodoGroup.important) {
+                        Label(
+                            TodoGroup.important.name,
+                            systemImage: TodoGroup.important.iconName!
+                        )
+                    }
                 }
             }
+            .navigationTitle("Home")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(for: TodoGroup.self) { group in
+                TodoListView(
+                    modelContext: viewModel.modelContext,
+                    navPath: $navPath,
+                    group: group
+                )
+            }
+            .navigationDestination(for: Todo.self) { todo in
+                TodoDetailView(todo: todo)
+            }
+            .toolbar {
+                ToolbarItem(placement: .bottomBar) {
+                    Button {
+                        
+                    } label: {
+                        HStack {
+                            Image(systemName: "plus")
+                            Text("New Group")
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+extension SidebarView {
+    
+    @Observable
+    final class ViewModel {
+        
+        fileprivate let modelContext: ModelContext
+        
+        init(modelContext: ModelContext) {
+            self.modelContext = modelContext
         }
     }
 }
