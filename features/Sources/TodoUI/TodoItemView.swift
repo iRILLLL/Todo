@@ -6,25 +6,25 @@ struct TodoItemView: View {
     
     @Bindable var todo: Todo 
     @Binding var isCompleted: Bool
+    @Binding var isImportant: Bool
     
     var body: some View {
         HStack {
             CheckboxView(isChecked: $isCompleted)
             
             TextField(todo.name, text: $todo.name)
-                .strikethrough(todo.isCompleted)
-                .foregroundColor(todo.isCompleted ? .secondary : .primary)
+                .strikethrough(isCompleted)
+                .foregroundColor(isCompleted ? .secondary : .primary)
                 .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .submitLabel(.done)
-                .fixedSize()
             
             Spacer()
             
             Button {
-                todo.isImportant.toggle()
+                isImportant.toggle()
             } label: {
-                Image(systemName: todo.isImportant ? "star.fill" : "star")
+                Image(systemName: isImportant ? "star.fill" : "star")
             }
         }
     }

@@ -36,7 +36,13 @@ public struct TodoListView: View {
                         isCompleted: .init(
                             get: { todo.isCompleted },
                             set: { value in
-                                todo.completedAt = value ? Date() : nil
+                                viewModel.toggleChanged(todo: todo, value: value)
+                            }
+                        ),
+                        isImportant: .init(
+                            get: { todo.isImportant },
+                            set: { value in
+                                viewModel.starredChanged(todo: todo, value: value)
                             }
                         )
                     )
@@ -126,6 +132,16 @@ extension TodoListView {
             modelContext.insert(todo)
             fetchTodos()
             return id
+        }
+        
+        func starredChanged(todo: Todo, value: Bool) {
+            todo.isImportant = value
+            fetchTodos()
+        }
+        
+        func toggleChanged(todo: Todo, value: Bool) {
+            todo.completedAt = value ? Date() : nil
+            fetchTodos()
         }
         
         func fetchTodos() {
