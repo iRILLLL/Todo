@@ -38,6 +38,21 @@ struct SidebarView: View {
                         )
                     }
                 }
+                
+                Section(viewModel.groups.count > 1 ? "My Groups" : "My Group") {
+                    ForEach(viewModel.groups, id: \.self) { group in
+                        NavigationLink(value: group) {
+                            if let iconName = group.iconName {
+                                Label(
+                                    group.name,
+                                    systemImage: iconName
+                                )
+                            } else {
+                                Text(group.name)
+                            }
+                        }
+                    }
+                }
             }
             .navigationTitle("Home")
             .navigationBarTitleDisplayMode(.inline)
@@ -54,7 +69,8 @@ struct SidebarView: View {
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {
                     Button {
-                        
+                        let newGroup = viewModel.addNewGroup()
+                        navPath.append(newGroup)
                     } label: {
                         HStack {
                             Image(systemName: "plus")
@@ -73,9 +89,31 @@ extension SidebarView {
     final class ViewModel {
         
         fileprivate let modelContext: ModelContext
+        private(set) var groups: [TodoGroup] = []
         
         init(modelContext: ModelContext) {
             self.modelContext = modelContext
+            fetchGroups()
+        }
+        
+        func addNewGroup() -> TodoGroup {
+            let group = TodoGroup(name: "New Group")
+            modelContext.insert(group)
+            fetchGroups()
+            return group
+        }
+        
+        func fetchGroups() {
+            
+            let descriptor = FetchDescriptor<TodoGroup>(
+                sortBy: []
+            )
+            
+            do {
+                self.groups = try modelContext.fetch(descriptor)
+            } catch {
+                print(error)
+            }
         }
     }
 }

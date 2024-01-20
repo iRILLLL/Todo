@@ -89,6 +89,7 @@ extension TodoListView {
         
         private(set) var todos = [Todo]()
         
+        // if recently added todo is empty text, then delete when keyboard out of focus
         private var recentlyAddedTodo: Todo?
         
         private let modelContext: ModelContext
@@ -162,7 +163,7 @@ extension TodoListView {
             do {
                 self.todos = try modelContext.fetch(descriptor)
             } catch {
-                print(error.localizedDescription)
+                print(error)
             }
         }
     }
