@@ -43,12 +43,20 @@ struct SidebarView: View {
                     ForEach(viewModel.groups, id: \.self) { group in
                         NavigationLink(value: group) {
                             if let iconName = group.iconName {
-                                Label(
-                                    group.name,
-                                    systemImage: iconName
-                                )
+                                LabeledContent {
+                                    Text(String(group.todos.count))
+                                } label: {
+                                    HStack {
+                                        Image(systemName: iconName)
+                                        Text(group.name)
+                                    }
+                                }
                             } else {
-                                Text(group.name)
+                                LabeledContent {
+                                    Text(String(group.todos.count))
+                                } label: {
+                                    Text(group.name)
+                                }
                             }
                         }
                     }
@@ -97,7 +105,10 @@ extension SidebarView {
         }
         
         func addNewGroup() -> TodoGroup {
-            let group = TodoGroup(name: "New Group")
+            let group = TodoGroup(
+                id: UUID(),
+                name: "New Group"
+            )
             modelContext.insert(group)
             fetchGroups()
             return group
