@@ -9,7 +9,7 @@ public final class Todo {
     
     public var name: String
     public var isImportant: Bool
-    public var group: TodoGroup
+    public var group: TodoGroup?
     
     @Attribute(originalName: "completed_at")
     public var completedAt: Date?
@@ -29,7 +29,6 @@ public final class Todo {
         id: UUID,
         name: String = "",
         isImportant: Bool = false,
-        group: TodoGroup,
         completedAt: Date? = nil,
         dueAt: Date? = nil,
         createdAt: Date
@@ -37,7 +36,6 @@ public final class Todo {
         self.id = id
         self.name = name
         self.isImportant = isImportant
-        self.group = group
         self.completedAt = completedAt
         self.dueAt = dueAt
         self.createdAt = createdAt

@@ -5,6 +5,7 @@ import TodoInterface
 public struct TodoListView: View {
     
     @State private var viewModel: ViewModel
+    @State private var navigationTitle: String
     @Binding private var navPath: NavigationPath
     private var group: TodoGroup
     
@@ -19,11 +20,14 @@ public struct TodoListView: View {
                 group: group
             )
         )
+        _navigationTitle = State(initialValue: group.name)
         _navPath = navPath
         self.group = group
     }
     
     @FocusState private var focusedTodo: UUID?
+    @FocusState private var focused: UUID?
+    private var textFieldFocusID = UUID()
     
     public var body: some View {
         List {
@@ -57,6 +61,13 @@ public struct TodoListView: View {
                 }
             }
         }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                if group.name == "New Group" {
+                    self.focused = self.textFieldFocusID
+                }
+            }
+        }
         .animation(.default, value: viewModel.todos)
         .onChange(of: focusedTodo) { oldValue, newValue in
             guard
@@ -64,8 +75,16 @@ public struct TodoListView: View {
             else { return }
             viewModel.keyboardFocusChanged()
         }
-        .toolbar(id: UUID().uuidString) {
-            ToolbarItem(id: UUID().uuidString, placement: .primaryAction) {
+        .navigationTitle($navigationTitle)
+        .onChange(of: navigationTitle) { oldValue, newValue in
+            if newValue.isEmpty {
+                navigationTitle = oldValue
+            } else {
+                viewModel.navigationTitleChanged(title: newValue)
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
                 Button {
                     withAnimation {
                         let newTodoID = viewModel.addNewTodo()
@@ -76,7 +95,6 @@ public struct TodoListView: View {
                 }
             }
         }
-        .navigationTitle(group.name)
         .scrollDismissesKeyboard(.immediately)
         .listStyle(.plain)
     }
@@ -127,11 +145,11 @@ extension TodoListView {
             let id = UUID()
             let todo = Todo(
                 id: id,
-                group: self.group,
                 createdAt: Date()
             )
             self.recentlyAddedTodo = todo
             modelContext.insert(todo)
+            todo.group = self.group
             fetchTodos()
             return id
         }
@@ -156,12 +174,21 @@ extension TodoListView {
             let groupName = self.group.name
             
             let descriptor = FetchDescriptor<Todo>(
-                predicate: #Predicate { $0.group.name == groupName },
+                predicate: #Predicate { $0.group?.name == groupName },
                 sortBy: sortBy
             )
             
             do {
                 self.todos = try modelContext.fetch(descriptor)
+            } catch {
+                print(error)
+            }
+        }
+        
+        func navigationTitleChanged(title: String) {
+            group.name = title
+            do {
+                try modelContext.save()
             } catch {
                 print(error)
             }
